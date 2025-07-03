@@ -1,0 +1,29 @@
+/* Minimal, responsive, readable */
+:root {
+  font-family: system-ui, sans-serif;
+  color-scheme: light dark;
+  --accent: #4e9cff;
+}
+body { margin: 0; padding: 2rem 1rem; line-height: 1.5; }
+header, section, footer { max-width: 800px; margin: auto; }
+h1, h2 { color: var(--accent); margin-bottom: 0.25rem; }
+
+.clock-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+.clock-grid div {
+  background: rgba(0,0,0,0.04);
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+.city   { display:block; font-weight:600; }
+.time   { font-size: 1.5rem; letter-spacing: 0.5px; }
+
+#obits ul { list-style: none; padding-left: 0; }
+#obits li { margin-bottom: 0.75rem; }
+#obits a  { text-decoration:none; color:inherit; }
+.note     { display:block; margin-top:1rem; font-size:0.8rem; opacity:0.8; }
