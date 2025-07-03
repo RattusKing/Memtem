@@ -1,66 +1,52 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Obituary Clock</title>
+// Import DateTime from Luxon (make sure luxon is included in your HTML)
+const { DateTime } = luxon;
 
-  <!-- Digital font for clocks -->
-  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet" />
+// City timezones for clocks
+const cities = [
+  { id: 'Portland', zone: 'America/Los_Angeles' },
+  { id: 'NewYork', zone: 'America/New_York' },
+  { id: 'London', zone: 'Europe/London' },
+  { id: 'Islamabad', zone: 'Asia/Karachi' },
+  { id: 'Beijing', zone: 'Asia/Shanghai' },
+  { id: 'Tokyo', zone: 'Asia/Tokyo' },
+];
 
-  <style>
-    /* Container grid for clocks */
-    #clock-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 16px;
-      justify-items: center;
-      padding: 20px;
-      background-color: #121212;
-      box-sizing: border-box;
+// Function to update all clocks every second
+function updateClocks() {
+  cities.forEach(({ id, zone }) => {
+    const now = DateTime.now().setZone(zone);
+    const clockEl = document.getElementById(`clock-${id}`);
+    if (clockEl) {
+      clockEl.textContent = now.toFormat('HH:mm:ss - dd LLL yyyy');
     }
+  });
+}
+updateClocks();
+setInterval(updateClocks, 1000);
 
-    /* Each clock box */
-    .clock-box {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background-color: #111;
-      padding: 8px 12px;
-      border-radius: 10px;
-      box-shadow: 0 0 8px rgba(0, 255, 100, 0.3);
-      width: 100%;
-      max-width: 280px;
-    }
+// URL for USA Legacy.com obituaries RSS feed
+const legacyUSFeed = 'https://www.legacy.com/obituaries/rss.xml?country=us';
 
-    /* Clock digital style */
-    .clock {
-      font-family: 'VT323', monospace;
-      font-size: 1.8rem;
-      color: #00FF66;
-      background-color: #000;
-      padding: 6px 12px;
-      border-radius: 6px;
-      letter-spacing: 1.5px;
-      box-shadow: 0 0 10px #00FF66;
-      flex-grow: 1;
-      user-select: none;
-      text-align: center;
-    }
+// Load and display obituaries in #obits-list
+async function loadObits(url) {
+  try {
+    const API = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}`;
+    const res = await fetch(API);
+    const data = await res.json();
+    if (data.status !== 'ok') throw new Error('RSS error');
 
-    /* Obituaries list style */
-    #obits-list {
-      margin: 20px auto;
-      max-width: 600px;
-      padding: 0;
-      list-style: none;
-      color: #eee;
-      font-family: Arial, sans-serif;
-      font-size: 1rem;
-    }
+    const list = document.getElementById('obits-list');
+    list.innerHTML = '';
 
-    #obits-list li {
-      margin-bottom: 12px;
-      background-color: #222;
-      padding: 10px;
-      border-radius: 6p
+    data.items.slice(0, 10).forEach(item => {
+      const li = document.createElement('li');
+      li.innerHTML = `<a href="${item.link}" target="_blank" rel="noopener">${item.title}</a> <em>(${DateTime.fromISO(item.pubDate).toFormat('dd LLL yyyy')})</em>`;
+      list.appendChild(li);
+    });
+  } catch (err) {
+    document.getElementById('obits-list').innerHTML = `<li>Error loading obituaries: ${err.message}</li>`;
+  }
+}
+
+// Load obits immediately on page load
+loadObits(legacyUSFeed);
