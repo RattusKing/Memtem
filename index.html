@@ -17,7 +17,6 @@
       justify-items: center;
       padding: 20px;
       background-color: #121212;
-      min-height: 100vh;
       box-sizing: border-box;
     }
 
@@ -25,21 +24,13 @@
     .clock-box {
       display: flex;
       align-items: center;
-      gap: 10px;
+      justify-content: center;
       background-color: #111;
       padding: 8px 12px;
       border-radius: 10px;
       box-shadow: 0 0 8px rgba(0, 255, 100, 0.3);
       width: 100%;
       max-width: 280px;
-    }
-
-    /* Flag styles */
-    .flag {
-      width: 32px;
-      height: auto;
-      border-radius: 4px;
-      flex-shrink: 0;
     }
 
     /* Clock digital style */
@@ -54,66 +45,22 @@
       box-shadow: 0 0 10px #00FF66;
       flex-grow: 1;
       user-select: none;
-    }
-  </style>
-</head>
-<body>
-
-  <div id="clock-container">
-    <div class="clock-box">
-      <img src="https://flagcdn.com/us.svg" alt="USA Flag" class="flag" />
-      <div class="clock" id="clock-Portland">--:--:--</div>
-    </div>
-    <div class="clock-box">
-      <img src="https://flagcdn.com/us.svg" alt="USA Flag" class="flag" />
-      <div class="clock" id="clock-NewYork">--:--:--</div>
-    </div>
-    <div class="clock-box">
-      <img src="https://flagcdn.com/gb.svg" alt="UK Flag" class="flag" />
-      <div class="clock" id="clock-London">--:--:--</div>
-    </div>
-    <div class="clock-box">
-      <img src="https://flagcdn.com/pk.svg" alt="Pakistan Flag" class="flag" />
-      <div class="clock" id="clock-Islamabad">--:--:--</div>
-    </div>
-    <div class="clock-box">
-      <img src="https://flagcdn.com/cn.svg" alt="China Flag" class="flag" />
-      <div class="clock" id="clock-Beijing">--:--:--</div>
-    </div>
-    <div class="clock-box">
-      <img src="https://flagcdn.com/jp.svg" alt="Japan Flag" class="flag" />
-      <div class="clock" id="clock-Tokyo">--:--:--</div>
-    </div>
-  </div>
-
-  <!-- Luxon for timezone support -->
-  <script src="https://cdn.jsdelivr.net/npm/luxon@3/build/global/luxon.min.js"></script>
-
-  <script>
-    const { DateTime } = luxon;
-
-    const cities = [
-      { id: 'Portland', zone: 'America/Los_Angeles' },
-      { id: 'NewYork', zone: 'America/New_York' },
-      { id: 'London', zone: 'Europe/London' },
-      { id: 'Islamabad', zone: 'Asia/Karachi' },
-      { id: 'Beijing', zone: 'Asia/Shanghai' },
-      { id: 'Tokyo', zone: 'Asia/Tokyo' },
-    ];
-
-    function updateClocks() {
-      cities.forEach(({ id, zone }) => {
-        const now = DateTime.now().setZone(zone);
-        const clockEl = document.getElementById(`clock-${id}`);
-        if (clockEl) {
-          clockEl.textContent = now.toFormat('HH:mm:ss - dd LLL yyyy');
-        }
-      });
+      text-align: center;
     }
 
-    updateClocks();
-    setInterval(updateClocks, 1000);
-  </script>
+    /* Obituaries list style */
+    #obits-list {
+      margin: 20px auto;
+      max-width: 600px;
+      padding: 0;
+      list-style: none;
+      color: #eee;
+      font-family: Arial, sans-serif;
+      font-size: 1rem;
+    }
 
-</body>
-</html>
+    #obits-list li {
+      margin-bottom: 12px;
+      background-color: #222;
+      padding: 10px;
+      border-radius: 6p
