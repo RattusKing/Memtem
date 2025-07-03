@@ -1,5 +1,6 @@
 const { DateTime } = luxon;
 
+// Cities for clock display
 const cities = [
   { id: 'Portland',   zone: 'America/Los_Angeles' },
   { id: 'NewYork',    zone: 'America/New_York'    },
@@ -9,6 +10,7 @@ const cities = [
   { id: 'Tokyo',      zone: 'Asia/Tokyo'          },
 ];
 
+// Update clock times
 function updateClocks() {
   cities.forEach(({ id, zone }) => {
     const now = DateTime.now().setZone(zone);
@@ -19,14 +21,12 @@ function updateClocks() {
 updateClocks();
 setInterval(updateClocks, 1000);
 
+// More accurate obituary feed from Legacy.com (USA only)
 const feedsByCountry = {
-  USA: 'https://rss.nytimes.com/services/xml/rss/nyt/Obituaries.xml',
-  UK: 'https://www.theguardian.com/tone/obituaries/rss',
-  Japan: 'https://news.yahoo.co.jp/pickup/rss.xml', // Example Japanese news RSS (not purely obits, but close)
+  USA: 'https://www.legacy.com/obituaries/rss.xml?country=us',
 };
 
-const countrySelect = document.getElementById('country-select');
-
+// Load obituaries
 async function loadObits(url) {
   try {
     const API = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}`;
@@ -49,10 +49,5 @@ async function loadObits(url) {
   }
 }
 
-// Load obits for default selected country on page load
-loadObits(feedsByCountry[countrySelect.value]);
-
-// Listen for changes and reload obits
-countrySelect.addEventListener('change', e => {
-  loadObits(feedsByCountry[e.target.value]);
-});
+// Load USA obits on page load
+loadObits(feedsByCountry.USA);
