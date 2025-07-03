@@ -1,58 +1,55 @@
-const { DateTime } = luxon;
+// Wait for luxon to load before running
+window.addEventListener('load', () => {
+  const { DateTime } = luxon;
 
-const cities = [
-  { id: 'Portland', zone: 'America/Los_Angeles' },
-  { id: 'NewYork', zone: 'America/New_York' },
-  { id: 'London', zone: 'Europe/London' },
-  { id: 'Islamabad', zone: 'Asia/Karachi' },
-  { id: 'Beijing', zone: 'Asia/Shanghai' },
-  { id: 'Tokyo', zone: 'Asia/Tokyo' },
-];
+  const cities = [
+    { id: 'Portland', zone: 'America/Los_Angeles' },
+    { id: 'NewYork', zone: 'America/New_York' },
+    { id: 'London', zone: 'Europe/London' },
+    { id: 'Islamabad', zone: 'Asia/Karachi' },
+    { id: 'Beijing', zone: 'Asia/Shanghai' },
+    { id: 'Tokyo', zone: 'Asia/Tokyo' },
+  ];
 
-function updateClocks() {
-  cities.forEach(({ id, zone }) => {
-    const now = DateTime.now().setZone(zone);
-    document.getElementById(`clock-${id}`).textContent =
-      now.toFormat('HH:mm:ss - dd LLL yyyy');
-  });
-}
-updateClocks();
-setInterval(updateClocks, 1000);
-
-const feedsByCountry = {
-  USA: 'https://rss.nytimes.com/services/xml/rss/nyt/Obituaries.xml',
-  UK: 'https://www.theguardian.com/tone/obituaries/rss',
-  Japan: 'https://news.yahoo.co.jp/pickup/rss.xml',
-};
-
-const countrySelect = document.getElementById('country-select');
-
-async function loadObits(url) {
-  try {
-    const API = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}`;
-    const res = await fetch(API);
-    const data = await res.json();
-    if (data.status !== 'ok') throw new Error('RSS error');
-
-    const list = document.getElementById('obits-list');
-    list.innerHTML = '';
-
-    data.items.slice(0, 10).forEach(item => {
-      const li = document.createElement('li');
-      li.innerHTML = `<a href="${item.link}" target="_blank" rel="noopener">
-                        <strong>${item.title}</strong>
-                      </a> <em>(${DateTime.fromISO(item.pubDate).toFormat('dd LLL yyyy')})</em>`;
-      list.appendChild(li);
+  // Update clocks every second
+  function updateClocks() {
+    cities.forEach(({ id, zone }) => {
+      const now = DateTime.now().setZone(zone);
+      const clockEl = document.getElementById(`clock-${id}`);
+      if (clockEl) {
+        clockEl.textContent = now.toFormat('HH:mm:ss - dd LLL yyyy');
+      }
     });
-  } catch (err) {
-    document.getElementById('obits-list').innerHTML = `<li>Error loading obituaries: ${err.message}</li>`;
   }
-}
+  updateClocks();
+  setInterval(updateClocks, 1000);
 
-// Load obits for default selected country on page load
-loadObits(feedsByCountry[countrySelect.value]);
+  // NYT obituaries RSS feed (reliable for rss2json)
+  const nytObitsFeed = 'https://rss.nytimes.com/services/xml/rss/nyt/Obituaries.xml';
 
-// Listen for changes and reload obits
-countrySelect.addEventListener('change', e => {
-  loadObits(feedsByCountry[e.target.value]);
+  // Load obituaries and display in #obits-list
+  async function loadObits(url) {
+    try {
+      const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}`;
+      const response = await fetch(apiUrl);
+      const data = await response.json();
+
+      if (data.status !== 'ok') throw new Error('RSS error');
+
+      const list = document.getElementById('obits-list');
+      list.innerHTML = '';
+
+      data.items.slice(0, 10).forEach(item => {
+        const li = document.createElement('li');
+        li.innerHTML = `<a href="${item.link}" target="_blank" rel="noopener">${item.title}</a> <em>(${DateTime.fromISO(item.pubDate).toFormat('dd LLL yyyy')})</em>`;
+        list.appendChild(li);
+      });
+    } catch (err) {
+      const list = document.getElementById('obits-list');
+      list.innerHTML = `<li>Error loading obituaries: ${err.message}</li>`;
+    }
+  }
+
+  // Load obituaries on page load
+  loadObits(nytObitsFeed);
 });
