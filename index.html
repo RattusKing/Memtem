@@ -3,80 +3,117 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>World Clock & Memory Garden</title>
+  <title>Obituary Clock</title>
 
-  <link rel="stylesheet" href="style.css" />
-  <script src="https://cdn.jsdelivr.net/npm/luxon@3.4.4/build/global/luxon.min.js"></script>
+  <!-- Digital font for clocks -->
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet" />
+
+  <style>
+    /* Container grid for clocks */
+    #clock-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      justify-items: center;
+      padding: 20px;
+      background-color: #121212;
+      min-height: 100vh;
+      box-sizing: border-box;
+    }
+
+    /* Each clock box */
+    .clock-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background-color: #111;
+      padding: 8px 12px;
+      border-radius: 10px;
+      box-shadow: 0 0 8px rgba(0, 255, 100, 0.3);
+      width: 100%;
+      max-width: 280px;
+    }
+
+    /* Flag styles */
+    .flag {
+      width: 32px;
+      height: auto;
+      border-radius: 4px;
+      flex-shrink: 0;
+    }
+
+    /* Clock digital style */
+    .clock {
+      font-family: 'VT323', monospace;
+      font-size: 1.8rem;
+      color: #00FF66;
+      background-color: #000;
+      padding: 6px 12px;
+      border-radius: 6px;
+      letter-spacing: 1.5px;
+      box-shadow: 0 0 10px #00FF66;
+      flex-grow: 1;
+      user-select: none;
+    }
+  </style>
 </head>
 <body>
-  <header>
-    <h1> Memory Garden </h1>
-    <p> View the time around the world and lives worth remembering.</p>
-  </header>
 
-  <section id="clocks">
-    <h2>World Clocks</h2>
-    <div class="clock-grid">
-      <div><span class="city">Portland</span><span id="clock-Portland" class="time"></span></div>
-      <div><span class="city">New York</span><span id="clock-NewYork" class="time"></span></div>
-      <div><span class="city">London</span><span id="clock-London" class="time"></span></div>
-      <div><span class="city">Islamabad</span><span id="clock-Islamabad" class="time"></span></div>
-      <div><span class="city">Beijing</span><span id="clock-Beijing" class="time"></span></div>
-      <div><span class="city">Tokyo</span><span id="clock-Tokyo" class="time"></span></div>
+  <div id="clock-container">
+    <div class="clock-box">
+      <img src="https://flagcdn.com/us.svg" alt="USA Flag" class="flag" />
+      <div class="clock" id="clock-Portland">--:--:--</div>
     </div>
-  </section>
+    <div class="clock-box">
+      <img src="https://flagcdn.com/us.svg" alt="USA Flag" class="flag" />
+      <div class="clock" id="clock-NewYork">--:--:--</div>
+    </div>
+    <div class="clock-box">
+      <img src="https://flagcdn.com/gb.svg" alt="UK Flag" class="flag" />
+      <div class="clock" id="clock-London">--:--:--</div>
+    </div>
+    <div class="clock-box">
+      <img src="https://flagcdn.com/pk.svg" alt="Pakistan Flag" class="flag" />
+      <div class="clock" id="clock-Islamabad">--:--:--</div>
+    </div>
+    <div class="clock-box">
+      <img src="https://flagcdn.com/cn.svg" alt="China Flag" class="flag" />
+      <div class="clock" id="clock-Beijing">--:--:--</div>
+    </div>
+    <div class="clock-box">
+      <img src="https://flagcdn.com/jp.svg" alt="Japan Flag" class="flag" />
+      <div class="clock" id="clock-Tokyo">--:--:--</div>
+    </div>
+  </div>
 
-  <section id="obits">
-    <h2>Daily Obituaries</h2>
+  <!-- Luxon for timezone support -->
+  <script src="https://cdn.jsdelivr.net/npm/luxon@3/build/global/luxon.min.js"></script>
 
-    <!-- Country selector dropdown -->
-    <label for="country-select">Select country:</label>
-    <select id="country-select">
-      <option value="USA">USA</option>
-      <option value="UK">UK</option>
-      <option value="Japan">Japan</option>
-    </select>
+  <script>
+    const { DateTime } = luxon;
 
-    <ul id="obits-list">
-      <li>Loading latest obituaries…</li>
-    </ul>
+    const cities = [
+      { id: 'Portland', zone: 'America/Los_Angeles' },
+      { id: 'NewYork', zone: 'America/New_York' },
+      { id: 'London', zone: 'Europe/London' },
+      { id: 'Islamabad', zone: 'Asia/Karachi' },
+      { id: 'Beijing', zone: 'Asia/Shanghai' },
+      { id: 'Tokyo', zone: 'Asia/Tokyo' },
+    ];
 
-    <small class="note">Sources: NY Times, The Guardian, and a sample Japanese feed (replace with real URL).</small>
-  </section>
+    function updateClocks() {
+      cities.forEach(({ id, zone }) => {
+        const now = DateTime.now().setZone(zone);
+        const clockEl = document.getElementById(`clock-${id}`);
+        if (clockEl) {
+          clockEl.textContent = now.toFormat('HH:mm:ss - dd LLL yyyy');
+        }
+      });
+    }
 
-  <footer>
-    <p>&copy; 2025 Levi Peterson • Built with GitHub Pages</p>
-  </footer>
+    updateClocks();
+    setInterval(updateClocks, 1000);
+  </script>
 
-  <script src="script.js"></script>
 </body>
-
-  <!-- Clocks with flags container -->
-<div id="clock-container">
-  <div class="clock-box">
-    <img src="https://flagcdn.com/us.svg" alt="USA Flag" class="flag" />
-    <div class="clock" id="clock-Portland"></div>
-  </div>
-  <div class="clock-box">
-    <img src="https://flagcdn.com/us.svg" alt="USA Flag" class="flag" />
-    <div class="clock" id="clock-NewYork"></div>
-  </div>
-  <div class="clock-box">
-    <img src="https://flagcdn.com/gb.svg" alt="UK Flag" class="flag" />
-    <div class="clock" id="clock-London"></div>
-  </div>
-  <div class="clock-box">
-    <img src="https://flagcdn.com/pk.svg" alt="Pakistan Flag" class="flag" />
-    <div class="clock" id="clock-Islamabad"></div>
-  </div>
-  <div class="clock-box">
-    <img src="https://flagcdn.com/cn.svg" alt="China Flag" class="flag" />
-    <div class="clock" id="clock-Beijing"></div>
-  </div>
-  <div class="clock-box">
-    <img src="https://flagcdn.com/jp.svg" alt="Japan Flag" class="flag" />
-    <div class="clock" id="clock-Tokyo"></div>
-  </div>
-</div>
-
 </html>
