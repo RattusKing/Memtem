@@ -2,30 +2,23 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>World Clock & Memory Garden</title>
 
-  <!-- Styles -->
   <link rel="stylesheet" href="style.css" />
-
-  <!-- Luxon (tiny modern date‑time lib) via jsDelivr CDN -->
- <script src="https://cdn.jsdelivr.net/npm/luxon@3.4.4/build/global/luxon.min.js"></script>
-
-
+  <script src="https://cdn.jsdelivr.net/npm/luxon@3.4.4/build/global/luxon.min.js"></script>
 </head>
 <body>
   <header>
     <h1>World Clock & Memory Garden</h1>
-    <p>An up to the second look at time and some of the lives worth remembering.</p>
+    <p>An up-to-the-second look at time—and lives worth remembering.</p>
   </header>
 
-  <!-- CLOCKS -->
   <section id="clocks">
-    <h2>World Clocks</h2>
+    <h2>World Clocks</h2>
     <div class="clock-grid">
-      <!-- JS fills these spans every second -->
       <div><span class="city">Portland</span><span id="clock-Portland" class="time"></span></div>
-      <div><span class="city">New York</span><span id="clock-NewYork" class="time"></span></div>
+      <div><span class="city">New York</span><span id="clock-NewYork" class="time"></span></div>
       <div><span class="city">London</span><span id="clock-London" class="time"></span></div>
       <div><span class="city">Islamabad</span><span id="clock-Islamabad" class="time"></span></div>
       <div><span class="city">Beijing</span><span id="clock-Beijing" class="time"></span></div>
@@ -33,20 +26,28 @@
     </div>
   </section>
 
-  <!-- OBITUARIES -->
   <section id="obits">
     <h2>Daily Obituaries</h2>
+
+    <!-- Country selector dropdown -->
+    <label for="country-select">Select country:</label>
+    <select id="country-select">
+      <option value="USA">USA</option>
+      <option value="UK">UK</option>
+      <option value="Japan">Japan</option>
+    </select>
+
     <ul id="obits-list">
       <li>Loading latest obituaries…</li>
     </ul>
-    <small class="note">Source: NY Times public RSS feed, refreshed hourly.</small>
+
+    <small class="note">Sources: NY Times, The Guardian, and a sample Japanese feed (replace with real URL).</small>
   </section>
 
   <footer>
-    <p>&copy; 2025 The Rat King • Built with GitHub Pages</p>
+    <p>&copy; 2025 Levi Peterson • Built with GitHub Pages</p>
   </footer>
 
-  <!-- Main logic -->
   <script src="script.js"></script>
 </body>
 </html>
