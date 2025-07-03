@@ -1,7 +1,5 @@
-// Import DateTime from Luxon (make sure luxon is included in your HTML)
 const { DateTime } = luxon;
 
-// City timezones for clocks
 const cities = [
   { id: 'Portland', zone: 'America/Los_Angeles' },
   { id: 'NewYork', zone: 'America/New_York' },
@@ -11,23 +9,24 @@ const cities = [
   { id: 'Tokyo', zone: 'Asia/Tokyo' },
 ];
 
-// Function to update all clocks every second
 function updateClocks() {
   cities.forEach(({ id, zone }) => {
     const now = DateTime.now().setZone(zone);
-    const clockEl = document.getElementById(`clock-${id}`);
-    if (clockEl) {
-      clockEl.textContent = now.toFormat('HH:mm:ss - dd LLL yyyy');
-    }
+    document.getElementById(`clock-${id}`).textContent =
+      now.toFormat('HH:mm:ss - dd LLL yyyy');
   });
 }
 updateClocks();
 setInterval(updateClocks, 1000);
 
-// URL for USA Legacy.com obituaries RSS feed
-const legacyUSFeed = 'https://www.legacy.com/obituaries/rss.xml?country=us';
+const feedsByCountry = {
+  USA: 'https://rss.nytimes.com/services/xml/rss/nyt/Obituaries.xml',
+  UK: 'https://www.theguardian.com/tone/obituaries/rss',
+  Japan: 'https://news.yahoo.co.jp/pickup/rss.xml',
+};
 
-// Load and display obituaries in #obits-list
+const countrySelect = document.getElementById('country-select');
+
 async function loadObits(url) {
   try {
     const API = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}`;
@@ -40,7 +39,9 @@ async function loadObits(url) {
 
     data.items.slice(0, 10).forEach(item => {
       const li = document.createElement('li');
-      li.innerHTML = `<a href="${item.link}" target="_blank" rel="noopener">${item.title}</a> <em>(${DateTime.fromISO(item.pubDate).toFormat('dd LLL yyyy')})</em>`;
+      li.innerHTML = `<a href="${item.link}" target="_blank" rel="noopener">
+                        <strong>${item.title}</strong>
+                      </a> <em>(${DateTime.fromISO(item.pubDate).toFormat('dd LLL yyyy')})</em>`;
       list.appendChild(li);
     });
   } catch (err) {
@@ -48,5 +49,10 @@ async function loadObits(url) {
   }
 }
 
-// Load obits immediately on page load
-loadObits(legacyUSFeed);
+// Load obits for default selected country on page load
+loadObits(feedsByCountry[countrySelect.value]);
+
+// Listen for changes and reload obits
+countrySelect.addEventListener('change', e => {
+  loadObits(feedsByCountry[e.target.value]);
+});
