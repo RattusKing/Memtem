@@ -53,3 +53,45 @@ window.addEventListener('load', () => {
   // Load obituaries on page load
   loadObits(nytObitsFeed);
 });
+
+const obitForm = document.getElementById('obit-form');
+const userObitsList = document.getElementById('user-obits-list');
+
+obitForm.addEventListener('submit', e => {
+  e.preventDefault();
+
+  const name = document.getElementById('obit-name').value.trim();
+  const date = document.getElementById('obit-date').value;
+  const message = document.getElementById('obit-message').value.trim();
+
+  if (!name || !date) {
+    alert('Please enter both name and date of passing.');
+    return;
+  }
+
+  // Format date nicely with Luxon
+  const formattedDate = luxon.DateTime.fromISO(date).toFormat('dd LLL yyyy');
+
+  // Create a new list item
+  const li = document.createElement('li');
+  li.style.padding = '12px 18px';
+  li.style.borderBottom = '1px solid #004d00';
+  li.style.transition = 'background-color 0.2s ease';
+  li.style.color = '#00FF66';
+
+  let content = `<strong>${name}</strong> <em>(${formattedDate})</em>`;
+  if (message) {
+    content += `<br><span style="color: #ddd;">${message}</span>`;
+  }
+  li.innerHTML = content;
+
+  // Add hover effect
+  li.addEventListener('mouseenter', () => li.style.backgroundColor = 'rgba(0, 255, 102, 0.15)');
+  li.addEventListener('mouseleave', () => li.style.backgroundColor = 'transparent');
+
+  userObitsList.prepend(li); // newest on top
+
+  // Reset form
+  obitForm.reset();
+});
+
