@@ -5,11 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title> The Memory Garden </title>
 
-  <div style="margin: 20px; padding: 15px; background-color: #222; color: #cccccc; border-left: 4px solid #00ffcc; font-size: 1.1em;">
-  <p>
-    Welcome to the Memory Garden. Much like all life, our lives sprout and grow and wilt with time, just like in a garden. Here we have a look at how time moves forward even after we have wilted. Not to be forgotten but to be appreciated and set to assist the next sprout in time. 
-  </p>
-</div>
+<p style="color: #00ff66; font-size: 1.2em; text-align: center; font-family: 'Courier New', monospace;">
+  Welcome to the Memory Garden. Much like all life, our lives sprout, grow, and wilt with time—just like in a garden.<br>
+  Here we witness how time moves forward even after we have wilted.<br>
+  Not to be forgotten, but to be appreciated and to assist the next sprout in time.
+</p>
+
 
 
   <!-- Google Fonts -->
@@ -98,27 +99,34 @@
     }
 
 
-    <div style="margin: 10px; padding: 10px; background-color: #111; border: 1px solid #00ffcc; border-radius: 10px; width: fit-content;">
-  <div style="color: #00ffcc; font-weight: bold; font-size: 1.2em; text-align: center;">Helsinki</div>
-  <div id="helsinki-time" style="color: white; font-size: 2em; text-align: center;"></div>
-</div>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Helsinki Clock Test</title>
+</head>
+<body style="background-color: black; color: #00ff66; font-family: monospace; text-align: center; padding-top: 50px;">
+  <h2>Helsinki</h2>
+  <div id="helsinki-time" style="font-size: 2em;"></div>
 
-<script>
-  function updateHelsinkiTime() {
-    const options = {
-      timeZone: 'Europe/Helsinki',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit'
-    };
-    const formatter = new Intl.DateTimeFormat([], options);
-    const now = new Date();
-    document.getElementById('helsinki-time').innerText = formatter.format(now);
-  }
+  <script>
+    function updateHelsinkiTime() {
+      const options = {
+        timeZone: 'Europe/Helsinki',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+      };
+      const formatter = new Intl.DateTimeFormat([], options);
+      const now = new Date();
+      document.getElementById('helsinki-time').innerText = formatter.format(now);
+    }
 
-  updateHelsinkiTime();
-  setInterval(updateHelsinkiTime, 1000);
-</script>
+    updateHelsinkiTime();
+    setInterval(updateHelsinkiTime, 1000);
+  </script>
+</body>
+</html>
+
 
 
     /* Obituaries list */
