@@ -90,6 +90,30 @@
       text-align: center;
     }
 
+
+    <div style="margin: 10px; padding: 10px; background-color: #111; border: 1px solid #00ffcc; border-radius: 10px; width: fit-content;">
+  <div style="color: #00ffcc; font-weight: bold; font-size: 1.2em; text-align: center;">Helsinki</div>
+  <div id="helsinki-time" style="color: white; font-size: 2em; text-align: center;"></div>
+</div>
+
+<script>
+  function updateHelsinkiTime() {
+    const options = {
+      timeZone: 'Europe/Helsinki',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit'
+    };
+    const formatter = new Intl.DateTimeFormat([], options);
+    const now = new Date();
+    document.getElementById('helsinki-time').innerText = formatter.format(now);
+  }
+
+  updateHelsinkiTime();
+  setInterval(updateHelsinkiTime, 1000);
+</script>
+
+
     /* Obituaries list */
     #obits-list {
       width: 100%;
